@@ -5,7 +5,6 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 
 const StatusBadge = memo(() => (
-  // Perhatikan perubahan pada mt-28 md:mt-10 di bawah ini
   <div className="relative z-50 flex justify-start mb-6 mt-28 md:mt-10" data-aos="zoom-in" data-aos-delay="400">
     <div className="relative group inline-block">
       {/* Glow/bayangan biru di belakang */}
@@ -41,8 +40,9 @@ const MainTitle = memo(() => (
   </div>
 ));
 
+// PERBAIKAN: Menghapus hidden sm:block agar Tech Stack muncul di ponsel
 const TechStack = memo(({ tech }) => (
-  <div className="px-4 py-2 hidden sm:block rounded-full bg-[#030014]/5 backdrop-blur-sm border border-white/10 text-sm text-gray-300 hover:bg-[#030014]/10 transition-colors">
+  <div className="px-4 py-2 rounded-full bg-[#030014]/5 backdrop-blur-sm border border-white/10 text-xs sm:text-sm text-gray-300 hover:bg-[#030014]/10 transition-colors">
     {tech}
   </div>
 ));
@@ -66,8 +66,7 @@ const CTAButton = memo(({ href, text, icon: Icon }) => (
 
 const SocialLink = memo(({ icon: Icon, link, label }) => (
   <a href={link} target="_blank" rel="noopener noreferrer" aria-label={label}>
-    <button className="group relative p-3"
-      aria-label={label}>
+    <button className="group relative p-3" aria-label={label}>
       <div className="absolute inset-0 bg-gradient-to-r from-[#4FACFE] to-[#00F2FE] rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
       <div className="relative rounded-xl bg-black/50 backdrop-blur-xl p-2 flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-all duration-300">
         <Icon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
@@ -177,7 +176,9 @@ const Home = () => {
       <div className="min-h-screen bg-[#030014] overflow-hidden px-[5%] sm:px-[5%] lg:px-[10%]" id="Home">
         <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
           <div className="container mx-auto min-h-screen">
-            <div className="flex flex-col lg:flex-row items-center justify-center h-screen md:justify-between gap-0 sm:gap-12 lg:gap-20">
+            {/* PERBAIKAN: Mengubah h-screen menjadi min-h-screen lg:h-screen & menyesuaikan gap serta padding */}
+            <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen lg:h-screen pt-20 lg:pt-0 md:justify-between gap-8 sm:gap-12 lg:gap-20">
+              
               {/* Left Column */}
               <div className="w-full lg:w-1/2 space-y-6 sm:space-y-8 text-left lg:text-left order-1 lg:order-1 lg:mt-0"
                 data-aos="fade-right"
@@ -215,7 +216,8 @@ const Home = () => {
                   </div>
 
                   {/* Social Links */}
-                  <div className="hidden sm:flex gap-4 justify-start" data-aos="fade-up" data-aos-delay="1600">
+                  {/* PERBAIKAN: Mengubah hidden sm:flex menjadi flex flex-wrap serta menambahkan relative z-50 */}
+                  <div className="flex flex-wrap gap-3 sm:gap-4 justify-start relative z-50 pb-4 sm:pb-0" data-aos="fade-up" data-aos-delay="1600">
                     {SOCIAL_LINKS.map((social, index) => (
                       <SocialLink key={index} {...social} />
                     ))}
@@ -224,34 +226,37 @@ const Home = () => {
               </div>
 
               {/* Right Column - WebM Video */}
-              <div className="w-full py-0 md:py-[10%] sm:py-0 lg:w-1/2 h-[260px] sm:h-[400px] lg:h-[600px] xl:h-[750px] relative flex items-center justify-center order-2 lg:order-2 mt-5 sm:mt-0"
+              <div
+                className="w-full py-5 md:py-[10%] lg:w-1/2 min-h-[260px] sm:min-h-[400px] lg:h-[600px] xl:h-[750px] relative flex items-center justify-center order-2 lg:order-2 mt-5 sm:mt-0"
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
                 data-aos="fade-left"
-                data-aos-delay="600">
-                <div className="relative w-full opacity-90 pointer-events-none">
-                  <div className={`absolute inset-0 bg-gradient-to-r from-[#4FACFE]/10 to-[#00F2FE]/10 rounded-3xl blur-3xl transition-all duration-700 ease-in-out ${isHovering ? "opacity-50 scale-105" : "opacity-20 scale-100"
-                    }`}>
+                data-aos-delay="600"
+              >
+                <div className="relative w-full opacity-90">
+
+                  {/* Gradient Background */}
+                  <div className={`absolute inset-0 bg-gradient-to-r from-[#4FACFE]/10 to-[#00F2FE]/10 rounded-3xl blur-3xl transition-all duration-700 ease-in-out ${isHovering ? "opacity-50 scale-105" : "opacity-20 scale-100"}`}>
                   </div>
 
-                  <div className={`relative lg:left-12 z-10 w-full opacity-90 transform transition-transform duration-500 ${isHovering ? "scale-105" : "scale-100"
-                    }`}>
+                  {/* Animation GIF Container */}
+                  <div className={`relative lg:left-12 z-10 w-full opacity-90 transform transition-transform duration-500 ${isHovering ? "scale-105" : "scale-100"}`}>
                     <img
                       src="Animation1.gif"
                       alt="Developer Animation"
-                      className={`w-full h-full object-contain transition-all duration-500 ${isHovering
-                          ? "scale-[95%] sm:scale-[90%] md:scale-[90%] lg:scale-[90%] rotate-2"
-                          : "scale-[90%] sm:scale-[80%] md:scale-[80%] lg:scale-[80%]"
+                      className={`w-full h-auto max-h-[300px] sm:max-h-[500px] object-contain transition-all duration-500 ${isHovering
+                        ? "scale-[95%] sm:scale-[90%] rotate-2"
+                        : "scale-[90%] sm:scale-[80%]"
                         }`}
                     />
                   </div>
 
-                  <div className={`absolute inset-0 pointer-events-none transition-all duration-700 ${isHovering ? "opacity-50" : "opacity-20"
-                    }`}>
-                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-blue-500/10 to-blue-500/10 blur-3xl animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite] transition-all duration-700 ${isHovering ? "scale-110" : "scale-100"
-                      }`}>
+                  {/* Pulse Effect */}
+                  <div className={`absolute inset-0 pointer-events-none transition-all duration-700 ${isHovering ? "opacity-50" : "opacity-20"}`}>
+                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] bg-gradient-to-br from-blue-500/10 to-blue-500/10 blur-3xl animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite] transition-all duration-700 ${isHovering ? "scale-110" : "scale-100"}`}>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
